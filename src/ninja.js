@@ -1,33 +1,44 @@
 import * as PIXI from 'pixi.js';
+import './ninja.css';
+import ninjaImg from './ninja.jpg';
 
-// The application will create a renderer using WebGL, if possible,
-// with a fallback to a canvas render. It will also setup the ticker
-// and the root stage PIXI.Container
-const app = new PIXI.Application();
+let w = window.innerWidth;
+let h = window.innerHeight;
 
-// The application will create a canvas element for you that you
-// can then insert into the DOM
-document.body.appendChild(app.view);
-
-// load the texture we need
-app.loader.add('bunny', './src/ninja.jpg').load((loader, resources) => {
-  // This creates a texture from a 'bunny.png' image
-  const bunny = new PIXI.Sprite(resources.bunny.texture);
-
-  // Setup the position of the bunny
-  bunny.x = app.renderer.width / 2;
-  bunny.y = app.renderer.height / 2;
-
-  // Rotate around the center
-  bunny.anchor.x = 0.5;
-  bunny.anchor.y = 0.5;
-
-  // Add the bunny to the scene we are building
-  app.stage.addChild(bunny);
-
-  // Listen for frame updates
-  app.ticker.add(() => {
-    // each frame we spin the bunny around a bit
-    bunny.rotation += 0.01;
-  });
+const renderer = new PIXI.Renderer({
+  width: w,
+  height: h,
 });
+
+function resize() {
+  w = window.innerWidth;
+  h = window.innerHeight;
+  renderer.resize(w, h);
+}
+
+window.addEventListener('resize', resize);
+
+document.body.appendChild(renderer.view);
+
+const stage = new PIXI.Container();
+
+const tex = PIXI.Texture.from(ninjaImg);
+const img = new PIXI.Sprite(tex);
+
+img.width = renderer.width;
+img.height = renderer.height;
+
+img.anchor.x = 0.5;
+img.anchor.y = 0.5;
+stage.addChild(img);
+
+const ticker = new PIXI.Ticker();
+ticker.start();
+
+function fn() {
+  img.x = renderer.screen.width / 2;
+  img.y = renderer.screen.height / 2;
+  img.rotation += 0.01;
+  renderer.render(stage);
+}
+ticker.add(fn);
