@@ -1,44 +1,40 @@
 import * as PIXI from 'pixi.js';
 import './ninja.css';
-import ninjaImg from './ninja.jpg';
+// import ninjaImg from './ninja.jpg';
+import ninjaImg2 from './Ryzhyy.png';
 
-let w = window.innerWidth;
-let h = window.innerHeight;
-
-const renderer = new PIXI.Renderer({
-  width: w,
-  height: h,
+const app = new PIXI.Application({
+  width: 1280,
+  height: 720,
+  resolution: 1,
 });
 
-function resize() {
-  w = window.innerWidth;
-  h = window.innerHeight;
-  renderer.resize(w, h);
-}
+app.view.id = 'canvas';
+app.renderer.view.style.position = 'absolute';
+app.renderer.view.style.display = 'block';
+app.renderer.autoResize = true;
+app.renderer.backgroundColor = 0x061639;
 
-window.addEventListener('resize', resize);
+document.body.appendChild(app.view);
 
-document.body.appendChild(renderer.view);
+const texture = PIXI.Texture.from(ninjaImg2);
+let img = new PIXI.Sprite(texture);
+app.stage.addChild(img);
 
-const stage = new PIXI.Container();
+img.scale.x = 0.05;
+img.scale.y = 0.05;
+img.anchor.set(-1, -3);
 
-const tex = PIXI.Texture.from(ninjaImg);
-const img = new PIXI.Sprite(tex);
-
-img.width = renderer.width;
-img.height = renderer.height;
-
-img.anchor.x = 0.5;
-img.anchor.y = 0.5;
-stage.addChild(img);
-
-const ticker = new PIXI.Ticker();
-ticker.start();
+const canvas = document.getElementById('canvas');
 
 function fn() {
-  img.x = renderer.screen.width / 2;
-  img.y = renderer.screen.height / 2;
-  img.rotation += 0.01;
-  renderer.render(stage);
+  canvas.addEventListener('keydown', (event) => {
+    if (event.code === 'ArrowDown') {
+      img.y += 1;
+      app.renderer.render(app.stage);
+      event.preventDefault();
+    }
+  });
 }
-ticker.add(fn);
+
+app.ticker.add(fn);

@@ -1,6 +1,14 @@
-body { background: wheat; }
-/*canvas {
-  display: block;
-  background: #409ab1;
-  border: 10px dashed red
-}*/
+html {
+
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background: wheat;
+  margin: 0px;
+ }
+
